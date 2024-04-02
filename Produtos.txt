@@ -1,0 +1,89 @@
+-- Criar tabela Produtos
+CREATE TABLE Produtos (
+    id_produto 		INT PRIMARY KEY,
+    nome 			VARCHAR(100) NOT NULL,
+    preço 			DECIMAL(10,2) NOT NULL,
+    estoque 		INT NOT NULL,
+    perecível 		BOOLEAN NOT NULL,
+    marca 			VARCHAR(50),
+    nacionalidade 	VARCHAR(50)
+);
+
+-- Inserir produtos
+INSERT INTO Produtos (id_produto, nome, preço, estoque, perecível, marca, nacionalidade) VALUES
+(1, 'Farinha', 10.50, 100, FALSE, 'Tio João', 'Brasil'),
+(2, 'Arroz', 8.00, 80, FALSE, 'Camil', 'Brasil'),
+(3, 'Leite', 3.50, 50, TRUE, 'Nestlé', 'Brasil'),
+(4, 'Maçã', 2.00, 120, TRUE, 'Turma da Monica', 'Brasil'),
+(5, 'Peixe', 15.00, 30, TRUE, 'Pesquali', 'Brasil');
+
+--função para mostrar quantos produtos tem na tabela--
+
+SELECT COUNT(*) AS total_produtos
+FROM Produtos;
+
+--função para mostrar quanl o preço medio--
+
+SELECT AVG(preço) AS preço_médio
+FROM Produtos;
+
+--função para retornar a media dos produtos em 2 grupos distintos (pereciveis e não pereciveis)--
+
+SELECT
+    perecível,
+    AVG(preço) AS preço_médio
+FROM
+    Produtos
+GROUP BY
+    perecível;
+    
+--função para retornar a media dos preços dos produtos agrupados pelo nome dos produtos--
+    
+    SELECT
+    nome,
+    AVG(preço) AS preço_médio
+FROM
+    Produtos
+GROUP BY
+    nome;
+    
+--função para retornar a media dos preços e total em estoque dos produtos--
+    
+    SELECT
+    AVG(preço) AS preço_médio,
+    SUM(estoque) AS total_em_estoque
+FROM
+    Produtos;
+    
+--função para retornar nome, marca e quantidade em estoque do produto mais caro--
+    
+    SELECT
+    nome,
+    marca,
+    estoque
+FROM
+    Produtos
+WHERE
+    preço = (SELECT MAX(preço) FROM Produtos);
+    
+--função para retornar produtos com preços acima da media--
+    
+    SELECT
+    *
+FROM
+    Produtos
+WHERE
+    preço > (SELECT AVG(preço) FROM Produtos);
+    
+--função pra retornar a quantidade de produto de cada nacionalidade--
+    
+SELECT
+    nacionalidade,
+    COUNT(*) AS quantidade_de_produtos
+FROM
+    Produtos
+GROUP BY
+    nacionalidade;
+
+-- Verificar se os dados foram inseridos
+SELECT * FROM Produtos;
